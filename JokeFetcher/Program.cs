@@ -47,3 +47,42 @@ catch (HttpRequestException e)
     Console.WriteLine($"Request error: {e.Message}");
 }
 
+//Start with an empty list
+var jokes = new List<Joke>();
+
+try
+{
+    //Send a GET request to the "jokes/{type}/ten" endpoint
+    HttpResponseMessage response = client.GetAsync($"jokes/ten").Result;
+
+    //Ensure the request was successful 
+    response.EnsureSuccessStatusCode();
+
+    //Read the response content as a string 
+    string responseBody = response.Content.ReadAsStringAsync().Result;
+
+    //Desrialise the JSON response into a list of Joke objects
+    var jokeList = JsonSerializer.Deserialize<List<Joke>>(
+            responseBody, options
+        );
+    if (jokeList != null)
+    {
+        jokes.AddRange(jokeList);
+    }
+    //Add the jokes to the list if they are not null
+} catch (HttpRequestException e)
+{
+    //Handle any HTTP request errors 
+    Console.WriteLine($"Request error: {e.Message}");
+}
+
+//Display list of jokes
+Console.WriteLine("\n10 More Jokes");
+Console.WriteLine("-----------------");
+foreach (var joke in jokes)
+{
+    Console.WriteLine(joke.Setup);
+    Console.WriteLine(joke.Punchline);
+    Console.WriteLine();
+}
+
