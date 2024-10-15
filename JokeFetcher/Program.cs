@@ -86,19 +86,33 @@ foreach (var joke in jokes)
     Console.WriteLine();
 }
 
-var client2 = new HttpClient { BaseAddress = new Uri(baseUrl) };
+//Create an instance of the JokeService
+var jokeService = new JokeService();
 
-public void fetchJokesByType() {
-    {
-        try
-        {
-            HttpRequestMessage response = client2.GetAsync($"jokes/dad").Result;
-        } catch
-        {
+//Fetch 10 programming jokes
+List<Joke> programmingJokes = jokeService.FetchJokesByType(client, "programming");
 
-        }
+//Display the programming jokes
+Console.WriteLine("\n10 Programming Jokes:");
+Console.WriteLine("------------------------");
+foreach (var joke in programmingJokes)
+{
+    Console.WriteLine(joke.Setup);
+    Console.WriteLine(joke.Punchline);
+    Console.WriteLine();
+}
 
-    }
+//Fetch another 10 examples (dad jokes)
+List<Joke> dadJokes = jokeService.FetchJokesByType(client, "dad");
+
+// Display the dad jokes
+Console.WriteLine("\n10 Dad Jokes:");
+Console.WriteLine("----------------");
+foreach (var joke in dadJokes)
+{
+    Console.WriteLine(joke.Setup);
+    Console.WriteLine(joke.Punchline);
+    Console.WriteLine();
 }
 
 
