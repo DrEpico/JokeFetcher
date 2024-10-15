@@ -86,3 +86,19 @@ foreach (var joke in jokes)
     Console.WriteLine();
 }
 
+var client2 = new HttpClient { BaseAddress = new Uri(baseUrl) };
+
+public void fetchJokesByType() {
+    {
+        try
+        {
+            HttpRequestMessage response = client2.GetAsync($"jokes/dad").Result;
+        } catch
+        {
+
+        }
+
+    }
+}
+
+
