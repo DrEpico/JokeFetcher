@@ -14,27 +14,36 @@ var options = new JsonSerializerOptions
 
 var client = new HttpClient { BaseAddress = new Uri(baseUrl) };
 
-//Send a GET request to the "random_joke" endpoint
-HttpResponseMessage response = client.GetAsync("jokes/random").Result;
-
-//Ensure the request was successful (throws an exception if unsuccessful) 
-response.EnsureSuccessStatusCode();
-
-//Read the response content as a string 
-string responseBody = response.Content.ReadAsStringAsync().Result;
-
-//Deserialise the JSON response into a joke object (ignore case on key names)
-var joke = JsonSerializer.Deserialize<Joke>(responseBody, options);
-
-//Check if the joke is null
-if (joke != null )
+try
 {
-    //Display the joke in the console
-    Console.WriteLine("Here's a joke for you.");
-    Console.WriteLine(joke.Setup);
-    Console.WriteLine(joke.Punchline);
-} else
+    //Send a GET request to the "random_joke" endpoint
+    HttpResponseMessage response = client.GetAsync("jokes/random").Result;
+
+    //Ensure the request was successful (throws an exception if unsuccessful) 
+    response.EnsureSuccessStatusCode();
+
+    //Read the response content as a string 
+    string responseBody = response.Content.ReadAsStringAsync().Result;
+
+    //Deserialise the JSON response into a joke object (ignore case on key names)
+    var joke = JsonSerializer.Deserialize<Joke>(responseBody, options);
+
+    //Check if the joke is null
+    if (joke != null)
+    {
+        //Display the joke in the console
+        Console.WriteLine("Here's a joke for you.");
+        Console.WriteLine(joke.Setup);
+        Console.WriteLine(joke.Punchline);
+    }
+    else
+    {
+        Console.WriteLine("Failed to fetch a joke.");
+    }
+}
+catch (HttpRequestException e)
 {
-    Console.WriteLine("Failed to fetch a joke.");
+    //Handle and HTTP request errors
+    Console.WriteLine($"Request error: {e.Message}");
 }
 
